@@ -203,6 +203,14 @@ $router->addRoute('GET', '/api/notifications/unread-count', 'Notification', 'get
 $router->addRoute('GET', '/settings/backups', 'Backup', 'index');
 $router->addRoute('POST', '/settings/backups', 'Backup', 'index');
 
+// ESI routes
+$router->addRoute('GET', '/esi', 'ESI', 'index');
+$router->addRoute('GET', '/esi/contributions', 'ESI', 'esiContributions');
+$router->addRoute('GET', '/esi/reports', 'ESI', 'esiReports');
+$router->addRoute('POST', '/esi/reports', 'ESI', 'esiReports');
+$router->addRoute('GET', '/esi/settings', 'ESI', 'esiSettings');
+$router->addRoute('POST', '/esi/settings', 'ESI', 'esiSettings');
+
 // Additional API routes
 $router->addRoute('GET', '/api/generate-employee-code', 'Employee', 'generateEmployeeCode');
 $router->addRoute('POST', '/employees/bulk-update-salary', 'Employee', 'bulkUpdateSalary');

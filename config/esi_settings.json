@@ -1,0 +1,12 @@
+{
+    "employee_esi_rate": 0.75,
+    "employer_esi_rate": 3.25,
+    "esi_threshold": 21000.00,
+    "esi_ceiling": 25000.00,
+    "medical_benefit_rate": 4.00,
+    "dispensary_code": "ESI001",
+    "regional_office": "Delhi",
+    "employer_code": "12345678",
+    "last_updated": "2024-07-22",
+    "updated_by": "System Administrator"
+}

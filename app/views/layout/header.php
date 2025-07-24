@@ -77,6 +77,11 @@
                             <i class="fas fa-piggy-bank mr-2"></i>
                             PF Management
                         </a>
+                        
+                        <a href="/esi" class="nav-link <?php echo str_contains($_SERVER['REQUEST_URI'], '/esi') ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'; ?> inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            <i class="fas fa-shield-alt mr-2"></i>
+                            ESI Management
+                        </a>
                         <?php endif; ?>
                         
                         <!-- Masters Dropdown -->
@@ -113,7 +118,7 @@
                     <div class="relative">
                         <button type="button" class="p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 rounded-full" onclick="toggleDropdown('notifications-dropdown')">
                             <i class="fas fa-bell text-lg"></i>
-                            <span class="notification-badge absolute -top-1 -right-1 block h-4 w-4 rounded-full bg-red-400 text-xs text-white text-center leading-4 hidden">0</span>
+                            <span class="notification-badge absolute -top-1 -right-1 block h-4 w-4 rounded-full bg-red-400 text-xs text-white text-center leading-4 hidden" id="notification-count">0</span>
                         </button>
                         
                         <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">

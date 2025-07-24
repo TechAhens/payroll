@@ -193,4 +193,32 @@ class Settings extends Model {
             ];
         }
     }
+    
+    public function getNotificationSettings() {
+        return [
+            'enable_email_notifications' => $this->getSetting('enable_email_notifications', 1),
+            'enable_browser_notifications' => $this->getSetting('enable_browser_notifications', 1),
+            'notification_frequency' => $this->getSetting('notification_frequency', 'immediate'),
+            'payroll_notifications' => $this->getSetting('payroll_notifications', 1),
+            'attendance_notifications' => $this->getSetting('attendance_notifications', 1),
+            'loan_notifications' => $this->getSetting('loan_notifications', 1),
+            'system_notifications' => $this->getSetting('system_notifications', 1)
+        ];
+    }
+    
+    public function updateNotificationSettings($settings) {
+        try {
+            $this->beginTransaction();
+            
+            foreach ($settings as $key => $value) {
+                $this->setSetting($key, $value, 'Notification setting');
+            }
+            
+            $this->commit();
+            return ['success' => true];
+        } catch (Exception $e) {
+            $this->rollback();
+            return ['success' => false, 'message' => 'Failed to update notification settings'];
+        }
+    }
 }
