@@ -351,6 +351,85 @@ class EmployeeController extends Controller {
         ]);
     }
     
+    public function bulkUpdateSalary() {
+        $this->checkAuth();
+        $this->checkPermission('payroll');
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $employeeIds = $input['employee_ids'] ?? [];
+            $componentId = $input['component_id'] ?? '';
+            $amount = $input['amount'] ?? 0;
+            $csrfToken = $input['csrf_token'] ?? '';
+            
+            if (!$this->validateCSRFToken($csrfToken)) {
+                $this->jsonResponse(['success' => false, 'message' => 'Invalid token'], 400);
+                return;
+            }
+            
+            if (empty($employeeIds) || empty($componentId) || $amount <= 0) {
+                $this->jsonResponse(['success' => false, 'message' => 'Invalid parameters'], 400);
+                return;
+            }
+            
+            try {
+                $this->db->beginTransaction();
+                
+                $updated = 0;
+                foreach ($employeeIds as $employeeId) {
+                    // Update or insert salary structure
+                    $existing = $this->db->fetch(
+                        "SELECT id FROM salary_structures 
+                         WHERE employee_id = :emp_id AND component_id = :comp_id 
+                         AND (end_date IS NULL OR end_date >= CURDATE())",
+                        ['emp_id' => $employeeId, 'comp_id' => $componentId]
+                    );
+                    
+                    if ($existing) {
+                        $this->db->update('salary_structures', 
+                            ['amount' => $amount], 
+                            'id = :id', 
+                            ['id' => $existing['id']]
+                        );
+                    } else {
+                        $this->db->insert('salary_structures', [
+                            'employee_id' => $employeeId,
+                            'component_id' => $componentId,
+                            'amount' => $amount,
+                            'effective_date' => date('Y-m-d')
+                        ]);
+                    }
+                    $updated++;
+                }
+                
+                $this->db->commit();
+                $this->logActivity('bulk_update_salary', 'salary_structures', null);
+                $this->jsonResponse(['success' => true, 'updated' => $updated]);
+            } catch (Exception $e) {
+                $this->db->rollback();
+                $this->jsonResponse(['success' => false, 'message' => 'Failed to update salaries'], 500);
+            }
+        }
+    }
+    
+    public function generateEmployeeCode() {
+        $this->checkAuth();
+        $this->checkPermission('employees');
+        
+        $sql = "SELECT emp_code FROM employees WHERE emp_code LIKE 'EMP%' ORDER BY emp_code DESC LIMIT 1";
+        $result = $this->db->fetch($sql);
+        
+        if ($result) {
+            $lastCode = $result['emp_code'];
+            $number = intval(substr($lastCode, 3)) + 1;
+            $newCode = 'EMP' . str_pad($number, 3, '0', STR_PAD_LEFT);
+        } else {
+            $newCode = 'EMP001';
+        }
+        
+        $this->jsonResponse(['success' => true, 'code' => $newCode]);
+    }
+    
     private function getRecentPayslips($employeeId, $limit = 5) {
         $sql = "SELECT pp.period_name, pp.start_date, pp.end_date, pp.id as period_id,
                        SUM(CASE WHEN sc.type = 'earning' THEN pt.amount ELSE 0 END) as earnings,

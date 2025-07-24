@@ -55,6 +55,19 @@ GET /api/current-period
 
 ### Employee APIs
 
+#### Generate Employee Code
+```
+GET /api/generate-employee-code
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "code": "EMP006"
+}
+```
+
 #### Employee Search
 ```
 GET /api/employee-search?q=search_term&limit=10
@@ -110,6 +123,36 @@ GET /api/salary-calculator?basic=30000&components[HRA]=12000
   "total_earnings": 42000,
   "total_deductions": 6000,
   "net_salary": 36000
+}
+```
+
+### Notification APIs
+
+#### Get Unread Count
+```
+GET /api/notifications/unread-count
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "count": 5
+}
+```
+
+#### Mark Notification as Read
+```
+POST /notifications/mark-read
+```
+
+**Parameters:**
+- `notification_id`: ID of the notification to mark as read
+
+**Response:**
+```json
+{
+  "success": true
 }
 ```
 

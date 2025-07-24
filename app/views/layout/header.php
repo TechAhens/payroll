@@ -6,6 +6,8 @@
     <title><?php echo $title ?? 'Payroll Management System'; ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="<?php echo isset($csrf_token) ? $csrf_token : ''; ?>">
+    <meta name="user-id" content="<?php echo $_SESSION['user_id'] ?? ''; ?>">
     <script>
         tailwind.config = {
             theme: {
@@ -107,6 +109,28 @@
                 </div>
                 
                 <!-- User Menu -->
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button type="button" class="p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 rounded-full" onclick="toggleDropdown('notifications-dropdown')">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="notification-badge absolute -top-1 -right-1 block h-4 w-4 rounded-full bg-red-400 text-xs text-white text-center leading-4 hidden">0</span>
+                        </button>
+                        
+                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                            <div class="py-1">
+                                <div class="px-4 py-2 text-sm font-semibold text-gray-900 border-b flex items-center justify-between">
+                                    <span>Notifications</span>
+                                    <a href="/notifications" class="text-xs text-primary-600 hover:text-primary-800">View All</a>
+                                </div>
+                                <div class="max-h-64 overflow-y-auto" id="notifications-list">
+                                    <div class="px-4 py-3 text-sm text-gray-500 text-center">
+                                        Loading notifications...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 <div class="flex items-center">
                     <div class="relative">
                         <button type="button" class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" onclick="toggleDropdown('user-menu')">

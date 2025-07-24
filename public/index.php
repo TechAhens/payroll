@@ -191,6 +191,23 @@ $router->addRoute('GET', '/api/current-period', 'Api', 'currentPeriod');
 $router->addRoute('GET', '/api/employee-search', 'Api', 'employeeSearch');
 $router->addRoute('GET', '/api/salary-calculator', 'Api', 'salaryCalculator');
 
+// Notification routes
+$router->addRoute('GET', '/notifications', 'Notification', 'index');
+$router->addRoute('POST', '/notifications/mark-read', 'Notification', 'markRead');
+$router->addRoute('POST', '/notifications/mark-all-read', 'Notification', 'markAllRead');
+$router->addRoute('POST', '/notifications/delete', 'Notification', 'delete');
+$router->addRoute('POST', '/notifications/clear-all', 'Notification', 'clearAll');
+$router->addRoute('GET', '/api/notifications/unread-count', 'Notification', 'getUnreadCount');
+
+// Backup routes
+$router->addRoute('GET', '/settings/backups', 'Backup', 'index');
+$router->addRoute('POST', '/settings/backups', 'Backup', 'index');
+
+// Additional API routes
+$router->addRoute('GET', '/api/generate-employee-code', 'Employee', 'generateEmployeeCode');
+$router->addRoute('POST', '/employees/bulk-update-salary', 'Employee', 'bulkUpdateSalary');
+$router->addRoute('GET', '/api/period-details', 'Payroll', 'getCurrentPeriod');
+
 // Static file serving (for development)
 $requestUri = $_SERVER['REQUEST_URI'];
 if (preg_match('/\.(?:png|jpg|jpeg|gif|css|js|ico|svg)$/', $requestUri)) {

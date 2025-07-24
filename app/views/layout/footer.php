@@ -38,6 +38,7 @@
 
     <!-- Common JavaScript -->
     <script src="/public/js/app.js"></script>
+    <script src="/public/js/notifications.js"></script>
     
     <!-- Page-specific scripts -->
     <?php if (isset($scripts)): ?>

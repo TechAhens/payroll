@@ -49,6 +49,16 @@ function updateAttendanceWidget(summary) {
     if (absentElement) absentElement.textContent = summary.absent || 0;
     if (lateElement) lateElement.textContent = summary.late || 0;
     if (halfDayElement) halfDayElement.textContent = summary.half_day || 0;
+    
+    // Add animation to numbers
+    [presentElement, absentElement, lateElement, halfDayElement].forEach(element => {
+        if (element) {
+            element.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 200);
+        }
+    });
 }
 
 function loadCurrentPeriod() {

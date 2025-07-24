@@ -96,6 +96,9 @@ A comprehensive, enterprise-grade Payroll Management System built with **Core PH
 - Payslip management with email delivery
 - Multi-format export capabilities (Excel, CSV, PDF)
 - Real-time dashboard widgets and analytics
+- **Notification system** with real-time updates
+- **Comprehensive backup** and restore functionality
+- **Advanced reporting** with custom report builder
 
 ## 🛠️ Technical Architecture
 
@@ -263,6 +266,9 @@ define('RECORDS_PER_PAGE', 25);
 - **Data Protection**: SQL injection prevention with PDO
 - **CSRF Protection**: Token-based request validation
 - **Input Validation**: Server-side data sanitization
+- **Backup Management**: Automated and manual backup creation
+- **Notification Management**: System-wide notification configuration
+- **Notification System**: Real-time notifications and alerts
 - **Password Security**: BCrypt hashing
 - **Audit Trail**: Complete activity logging
 

@@ -98,7 +98,8 @@ include __DIR__ . '/../layout/header.php';
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Employee Distribution Chart -->
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Employee Distribution Chart -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200">
                 <div class="p-6 border-b border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-900 flex items-center">
@@ -125,6 +126,17 @@ include __DIR__ . '/../layout/header.php';
                     </div>
                 </div>
             </div>
+            
+            <!-- Recent Activity -->
+            <?php 
+            $activityFeed = [
+                'activities' => $stats['recent_activities'] ?? [],
+                'showUserNames' => true,
+                'maxItems' => 5,
+                'emptyMessage' => 'No recent activity'
+            ];
+            include __DIR__ . '/../components/activity-feed.php';
+            ?>
         </div>
 
         <!-- Quick Actions -->
@@ -177,36 +189,32 @@ include __DIR__ . '/../layout/header.php';
                 </div>
             </div>
 
-            <!-- Recent Activity -->
+            <!-- Today's Attendance Widget -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200">
                 <div class="p-6 border-b border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                        <i class="fas fa-history text-gray-500 mr-2"></i>
-                        Recent Activity
+                        <i class="fas fa-calendar-check text-purple-500 mr-2"></i>
+                        Today's Attendance
                     </h3>
                 </div>
                 <div class="p-6">
-                    <div class="space-y-4">
-                        <?php if (!empty($stats['recent_activities'])): ?>
-                            <?php foreach (array_slice($stats['recent_activities'], 0, 5) as $activity): ?>
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-gray-900">
-                                            <?php echo htmlspecialchars($activity['full_name']); ?>
-                                        </p>
-                                        <p class="text-xs text-gray-500">
-                                            <?php echo htmlspecialchars($activity['action']); ?>
-                                        </p>
-                                        <p class="text-xs text-gray-400">
-                                            <?php echo date('M j, H:i', strtotime($activity['created_at'])); ?>
-                                        </p>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p class="text-sm text-gray-500 italic">No recent activity</p>
-                        <?php endif; ?>
+                    <div id="attendance-widget" class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600" id="present-count">0</div>
+                            <div class="text-sm text-gray-500">Present</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-red-600" id="absent-count">0</div>
+                            <div class="text-sm text-gray-500">Absent</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-600" id="late-count">0</div>
+                            <div class="text-sm text-gray-500">Late</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-600" id="half-day-count">0</div>
+                            <div class="text-sm text-gray-500">Half Day</div>
+                        </div>
                     </div>
                 </div>
             </div>

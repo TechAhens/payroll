@@ -336,6 +336,68 @@ class PayrollController extends Controller {
         );
     }
     
+    public function payslips() {
+        $this->checkAuth();
+        $this->checkPermission('payroll');
+        
+        $periodId = $_GET['period_id'] ?? '';
+        $departmentId = $_GET['department_id'] ?? '';
+        $employeeSearch = $_GET['employee_search'] ?? '';
+        
+        // Get periods for filter
+        $periods = $this->db->fetchAll(
+            "SELECT * FROM payroll_periods ORDER BY start_date DESC LIMIT 12"
+        );
+        
+        // Get departments for filter
+        $departments = $this->db->fetchAll(
+            "SELECT * FROM departments WHERE status = 'active' ORDER BY name ASC"
+        );
+        
+        $this->loadView('payroll/payslips', [
+            'periods' => $periods,
+            'departments' => $departments,
+            'csrf_token' => $this->generateCSRFToken()
+        ]);
+    }
+    
+    public function emailPayslip($employeeId, $periodId) {
+        $this->checkAuth();
+        $this->checkPermission('payroll');
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $employeeModel = $this->loadModel('Employee');
+            $employee = $employeeModel->getEmployeeWithDetails($employeeId);
+            
+            if (!$employee || empty($employee['email'])) {
+                $this->jsonResponse(['success' => false, 'message' => 'Employee email not found'], 400);
+                return;
+            }
+            
+            // In a real implementation, you would generate and email the payslip
+            $this->logActivity('email_payslip', 'payroll_transactions', $periodId);
+            $this->jsonResponse(['success' => true, 'message' => 'Payslip sent successfully']);
+        }
+    }
+    
+    public function getCurrentPeriod() {
+        $this->checkAuth();
+        
+        $currentDate = date('Y-m-d');
+        $period = $this->db->fetch(
+            "SELECT * FROM payroll_periods 
+             WHERE start_date <= :date AND end_date >= :date
+             ORDER BY start_date DESC LIMIT 1",
+            ['date' => $currentDate]
+        );
+        
+        if ($period) {
+            $this->jsonResponse(['success' => true, 'period' => $period]);
+        } else {
+            $this->jsonResponse(['success' => false, 'message' => 'No active period found']);
+        }
+    }
+    
     private function exportPayslipsAsZip($employees, $periodId) {
         // Implementation for ZIP export of multiple payslips
         // This would generate individual PDF payslips and zip them

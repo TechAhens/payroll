@@ -11,6 +11,7 @@ window.PayrollApp = {
         this.setupEventListeners();
         this.setupFormValidation();
         this.setupAjaxDefaults();
+        this.loadNotifications();
     },
     
     // Setup global event listeners
@@ -263,6 +264,33 @@ window.PayrollApp = {
             
             if (callNow) func.apply(context, args);
         };
+    },
+    
+    // Load notifications
+    loadNotifications: function() {
+        fetch('/api/notifications/unread-count')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.updateNotificationBadge(data.count);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading notifications:', error);
+            });
+    },
+    
+    // Update notification badge
+    updateNotificationBadge: function(count) {
+        const badge = document.querySelector('.notification-badge');
+        if (badge) {
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
     }
 };
 
