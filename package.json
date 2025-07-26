@@ -1,7 +1,16 @@
 {
-  "name": "node-starter",
+  "name": "starter",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  },
+  "version": "1.0.0",
+  "description": "A comprehensive, enterprise-grade Payroll Management System built with **Core PHP (OOP)** and **MySQL** following MVC architecture. This system provides complete payroll processing capabilities with advanced features for managing employees, salary structures, integrations, and generating reports.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
