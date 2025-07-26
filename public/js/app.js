@@ -11,6 +11,7 @@ window.PayrollApp = {
         this.setupEventListeners();
         this.setupFormValidation();
         this.setupAjaxDefaults();
+        this.loadNotifications();
     },
     
     // Setup global event listeners
@@ -263,6 +264,110 @@ window.PayrollApp = {
             
             if (callNow) func.apply(context, args);
         };
+    },
+    
+    // Load notifications
+    loadNotifications: function() {
+        this.updateNotificationCount();
+        
+        // Load recent notifications for dropdown
+        fetch('/api/notifications/recent')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.updateNotificationDropdown(data.notifications);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading notifications:', error);
+            });
+    },
+    
+    // Update notification count
+    updateNotificationCount: function() {
+        fetch('/api/notifications/unread-count')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.updateNotificationBadge(data.count);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading notification count:', error);
+            });
+    },
+    
+    // Update notification badge
+    updateNotificationBadge: function(count) {
+        const badge = document.getElementById('notification-count');
+        if (badge) {
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    },
+    
+    // Update notification dropdown
+    updateNotificationDropdown: function(notifications) {
+        const container = document.getElementById('notifications-list');
+        if (!container) return;
+        
+        if (notifications.length === 0) {
+            container.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 text-center">No notifications</div>';
+            return;
+        }
+        
+        let html = '';
+        notifications.forEach(notification => {
+            html += `
+                <div class="px-4 py-3 hover:bg-gray-50 border-b ${!notification.is_read ? 'bg-blue-50' : ''}">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-${this.getNotificationIcon(notification.type)} text-${this.getNotificationColor(notification.type)}-500"></i>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <p class="text-sm font-medium text-gray-900">${notification.title}</p>
+                            <p class="text-xs text-gray-500 mt-1">${notification.message}</p>
+                            <p class="text-xs text-gray-400 mt-1">${this.timeAgo(notification.created_at)}</p>
+                        </div>
+                        ${!notification.is_read ? '<div class="w-2 h-2 bg-blue-500 rounded-full"></div>' : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    },
+    
+    // Get notification icon
+    getNotificationIcon: function(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            payroll: 'money-bill-wave',
+            attendance: 'calendar-check',
+            loan: 'hand-holding-usd',
+            system: 'cog'
+        };
+        return icons[type] || 'info-circle';
+    },
+    
+    // Get notification color
+    getNotificationColor: function(type) {
+        const colors = {
+            success: 'green',
+            error: 'red',
+            warning: 'yellow',
+            payroll: 'purple',
+            attendance: 'blue',
+            loan: 'indigo',
+            system: 'gray'
+        };
+        return colors[type] || 'blue';
     }
 };
 

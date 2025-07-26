@@ -1,0 +1,16 @@
+{
+    "establishment_code": "DLCPM0026293000",
+    "establishment_name": "PayrollPro Enterprise",
+    "employee_pf_rate": 12.00,
+    "employer_pf_rate": 12.00,
+    "eps_rate": 8.33,
+    "edli_rate": 0.50,
+    "admin_charges_rate": 0.65,
+    "pf_ceiling": 15000.00,
+    "eps_ceiling": 15000.00,
+    "pf_account_number": "PF/DL/26293",
+    "eps_account_number": "EPS/DL/26293",
+    "edli_account_number": "EDLI/DL/26293",
+    "last_updated": "2024-07-22",
+    "updated_by": "System Administrator"
+}

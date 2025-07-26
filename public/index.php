@@ -138,6 +138,17 @@ $router->addRoute('POST', '/leave-types', 'LeaveType', 'index');
 $router->addRoute('GET', '/holidays', 'Holiday', 'index');
 $router->addRoute('POST', '/holidays', 'Holiday', 'index');
 
+$router->addRoute('GET', '/pf', 'PF', 'index');
+$router->addRoute('GET', '/pf/ecr-generation', 'PF', 'ecrGeneration');
+$router->addRoute('POST', '/pf/ecr-generation', 'PF', 'ecrGeneration');
+$router->addRoute('GET', '/pf/reports', 'PF', 'pfReports');
+$router->addRoute('POST', '/pf/reports', 'PF', 'pfReports');
+$router->addRoute('GET', '/pf/contributions', 'PF', 'pfContributions');
+$router->addRoute('GET', '/pf/reconciliation', 'PF', 'pfReconciliation');
+$router->addRoute('POST', '/pf/reconciliation', 'PF', 'pfReconciliation');
+$router->addRoute('GET', '/pf/settings', 'PF', 'pfSettings');
+$router->addRoute('POST', '/pf/settings', 'PF', 'pfSettings');
+
 // Report routes
 $router->addRoute('GET', '/reports', 'Report', 'index');
 $router->addRoute('GET', '/reports/salary-register', 'Report', 'salaryRegister');
@@ -179,6 +190,31 @@ $router->addRoute('GET', '/api/attendance-summary', 'Api', 'attendanceSummary');
 $router->addRoute('GET', '/api/current-period', 'Api', 'currentPeriod');
 $router->addRoute('GET', '/api/employee-search', 'Api', 'employeeSearch');
 $router->addRoute('GET', '/api/salary-calculator', 'Api', 'salaryCalculator');
+
+// Notification routes
+$router->addRoute('GET', '/notifications', 'Notification', 'index');
+$router->addRoute('POST', '/notifications/mark-read', 'Notification', 'markRead');
+$router->addRoute('POST', '/notifications/mark-all-read', 'Notification', 'markAllRead');
+$router->addRoute('POST', '/notifications/delete', 'Notification', 'delete');
+$router->addRoute('POST', '/notifications/clear-all', 'Notification', 'clearAll');
+$router->addRoute('GET', '/api/notifications/unread-count', 'Notification', 'getUnreadCount');
+
+// Backup routes
+$router->addRoute('GET', '/settings/backups', 'Backup', 'index');
+$router->addRoute('POST', '/settings/backups', 'Backup', 'index');
+
+// ESI routes
+$router->addRoute('GET', '/esi', 'ESI', 'index');
+$router->addRoute('GET', '/esi/contributions', 'ESI', 'esiContributions');
+$router->addRoute('GET', '/esi/reports', 'ESI', 'esiReports');
+$router->addRoute('POST', '/esi/reports', 'ESI', 'esiReports');
+$router->addRoute('GET', '/esi/settings', 'ESI', 'esiSettings');
+$router->addRoute('POST', '/esi/settings', 'ESI', 'esiSettings');
+
+// Additional API routes
+$router->addRoute('GET', '/api/generate-employee-code', 'Employee', 'generateEmployeeCode');
+$router->addRoute('POST', '/employees/bulk-update-salary', 'Employee', 'bulkUpdateSalary');
+$router->addRoute('GET', '/api/period-details', 'Payroll', 'getCurrentPeriod');
 
 // Static file serving (for development)
 $requestUri = $_SERVER['REQUEST_URI'];
